@@ -1,0 +1,131 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@400;500;600&family=Fira+Code:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #06070d;
+  --ink-2: #0d0f1a;
+  --paper: #eef1fb;
+  --muted: #8a90a8;
+  --line: rgba(238, 241, 251, 0.09);
+  --accent: #5ef2ff;
+  --violet: #9b6bff;
+  --ink-rgb: 6 7 13;
+  --ink-2-rgb: 13 15 26;
+  --paper-rgb: 238 241 251;
+  --muted-rgb: 138 144 168;
+  --accent-rgb: 94 242 255;
+  --violet-rgb: 155 107 255;
+  --grad: linear-gradient(100deg, #5ef2ff 0%, #9b6bff 55%, #ff6bd5 100%);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: auto; }
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'Manrope', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+.font-display { font-family: 'Space Grotesk', sans-serif; }
+.font-mono { font-family: 'Fira Code', monospace; }
+
+::selection { background: var(--accent); color: var(--ink); }
+
+/* thin custom scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--ink); }
+::-webkit-scrollbar-thumb { background: #232741; }
+
+/* grain overlay */
+.grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* marquee */
+@keyframes marquee {
+  from { transform: translate3d(0,0,0); }
+  to { transform: translate3d(-50%,0,0); }
+}
+.marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  will-change: transform;
+  animation: marquee 32s linear infinite;
+}
+
+.hover-line {
+  background-image: var(--grad);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+.hover-line:hover { background-size: 100% 1px; }
+
+.tick {
+  background:
+    repeating-linear-gradient(90deg, var(--line) 0 1px, transparent 1px 100%);
+}
+
+/* gradient text */
+.text-grad {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* glowing gradient border */
+.grad-border {
+  position: relative;
+  isolation: isolate;
+}
+.grad-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: var(--grad);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* rotating halo around the portrait */
+@keyframes spin { to { transform: rotate(360deg); } }
+.halo {
+  background: conic-gradient(from 0deg, #5ef2ff, #9b6bff, #ff6bd5, #5ef2ff);
+  animation: spin 9s linear infinite;
+}
+
+/* packet travelling along an agent pipeline connector */
+@keyframes packet-x { from { left: 0%; } to { left: 100%; } }
+@keyframes packet-y { from { top: 0%; } to { top: 100%; } }
+.packet-x { animation: packet-x 1.6s cubic-bezier(0.65,0,0.35,1) infinite; }
+.packet-y { animation: packet-y 1.6s cubic-bezier(0.65,0,0.35,1) infinite; }
+
+@keyframes blink { 50% { opacity: 0; } }
+.caret { animation: blink 1s steps(1) infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track, .halo, .packet-x, .packet-y, .caret { animation: none; }
+}
